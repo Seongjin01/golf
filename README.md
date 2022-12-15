@@ -177,4 +177,14 @@ function re() {
   강의명에 따라 100, 200, 300, 400이 선택되고 알맞는 수강료가 바로 채워집니다. <br>
   만약 mbr.charAt(0)=='2' 라면 수강료가 50% 할인된다는 alert창이 띄워지고 가격도 (가격)/2로 50% 할인됩니다.
   
+  ```javascript
+  function vDisplay(code) {
+		document.classData.c_no.value = code;
+		document.classData.class_name.value = "none";
+		document.classData.tuition.value = "";
+	}
+```
+회원명 드롭다운 메뉴에서 이름마다 있는 벨류값을 받아와 값을 입력하는 함수인데, <br>
+드롭다운에서 회원명은 그 메뉴를 뜻하기 때문에 따로 벨류값이 없으므로 none을 입력한다.
+  
   
