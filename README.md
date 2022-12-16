@@ -187,4 +187,53 @@ function re() {
 회원명 드롭다운 메뉴에서 이름마다 있는 벨류값을 받아와 값을 입력하는 함수인데, <br>
 드롭다운에서 회원명은 그 메뉴를 뜻하기 때문에 따로 벨류값이 없으므로 none을 입력한다.
   
-  
+
+ 
+ # member_list.jsp
+ 
+ ![image](https://user-images.githubusercontent.com/102296551/208011461-806c6139-f31f-4a7e-a321-136a57b1c20b.png)
+ 
+ ```jsp
+ StringBuffer sb = new StringBuffer();
+	sb.append("select substr(c.resist_month,1,4)||'년'||substr(c.resist_month,5,2)||'월' resist_month,");
+	sb.append(" c.c_no, m.c_name, t.class_name, c.class_area,");
+	sb.append(" '￦'||to_char(c.tuition, '999,999') tuition, m.grade");
+	sb.append(" from tbl_class_202201 c, tbl_member_202201 m, tbl_teacher_202201 t");
+	sb.append(" where c.c_no = m.c_no and c.teacher_code = t.teacher_code");
+	
+	String sql = sb.toString();
+	
+	Connection conn = DBConnect.getConnection();
+	PreparedStatement pstmt = conn.prepareStatement(sql);
+	ResultSet rs = pstmt.executeQuery();
+ ```
+ 
+ 조인을 써서 회원정보 조회 페이지에 필요한 데이터를 DB에서 검색하는 쿼리문이다.
+ 수강일에 년/월을 표시해야하기 때문에 ||'년'||,||'월'||을 사용해 주었고 수강료 앞 부분에 기호를 설정함.
+
+# Teacher_sales.jsp
+
+![image](https://user-images.githubusercontent.com/102296551/208012350-026a6068-100f-498a-8d26-f972cd87b8b0.png)
+
+```jsp
+String sql ="select c.teacher_code, t.class_name, t.teacher_name,
+('￦'||to_char(sum(c.tuition),'999,999'))total 
+from TBL_CLASS_202201 c, TBL_TEACHER_202201 t 
+where c.teacher_code = t.teacher_code 
+group by c.teacher_code, t.class_name, t.teacher_name 
+order by c.teacher_code";
+```
+돈 단위 ￦를 표시해야하기 때문에 ￦문자를 설정해 주고, 조인을 써서 페이지에 필요한 데이터들을 DB에서 검색하는 쿼리문이다.
+
+```jsp
+<%while(rs.next()) { %>
+<tr>
+<td align="center"><%=rs.getString(1) %></td>
+<td align="center"><%=rs.getString(2) %></td>
+<td align="right"><%=rs.getString(3) %></td>
+<td align="right"><%=rs.getString(4) %></td>
+<%
+}
+%>
+```
+while문을 써서 rs로 받은 쿼리문의 결과값을 테이블에 차곡차곡 넣었다.
